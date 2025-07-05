@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import User, Product, Purchase
+from .models import Category, Product, Purchase
 
-class UserSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Category
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -13,7 +13,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class PurchaseSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
-    user =  UserSerializer(read_only=True)
 
     class Meta:
         model = Purchase
