@@ -1,7 +1,73 @@
-{% extands "products/base.html"%}
+{% extends "base.html" %}
+{% load static %}
 
-{% block content%}
-<div>
-    <form method='post'></form>
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<h1>Привет, {{ request.user.first_name|default:"" }} {{ request.user.last_name|default:"" }}</h1>
+
+<div class="profile-section">
+  <h2>Детали аккаунта</h2>
+
+  {% if request.user.first_name %}
+    <p><strong>Имя:</strong> {{ request.user.first_name }}</p>
+  {% endif %}
+  
+  {% if request.user.last_name %}
+    <p><strong>Фамилия:</strong> {{ request.user.last_name }}</p>
+  {% endif %}
+
+  {% if request.user.email %}
+    <p><strong>Email:</strong> {{ request.user.email }}</p>
+  {% endif %}
+
+  {% if request.user.phone %}
+    <p><strong>Телефон:</strong> {{ request.user.phone }}</p>
+  {% endif %}
+
+  {% if request.user.address1 %}
+    <p><strong>Адрес 1:</strong> {{ request.user.address1 }}</p>
+  {% endif %}
+
+  {% if request.user.address2 %}
+    <p><strong>Адрес 2:</strong> {{ request.user.address2 }}</p>
+  {% endif %}
+
+  {% if request.user.city %}
+    <p><strong>Город:</strong> {{ request.user.city }}</p>
+  {% endif %}
+
+  {% if request.user.country %}
+    <p><strong>Страна:</strong> {{ request.user.country }}</p>
+  {% endif %}
+
+  {% if request.user.province %}
+    <p><strong>Область:</strong> {{ request.user.province }}</p>
+  {% endif %}
+
+  {% if request.user.postal_code %}
+    <p><strong>Почтовый индекс:</strong> {{ request.user.postal_code }}</p>
+  {% endif %}
+
+  <!-- Кнопка для отображения формы -->
+  <button id="edit-profile-btn" type="button">Редактировать</button>
+
+  <!-- Сообщения -->
+  <div id="form-messages"></div>
+
+  <!-- Форма редактирования, скрыта по умолчанию -->
+  <form id="edit-profile-form" style="display: none;" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+  </form>
 </div>
-{% endblock%}
+
+<!-- Кнопка выхода -->
+<form method="post" action="{% url 'users:logout' %}" style="margin-top: 1rem;">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Выйти из аккаунта</button>
+</form>
+
+{% comment %} <script src="{% static 'js/profile.js' %}"></script> {% endcomment %}
+{% endblock %}

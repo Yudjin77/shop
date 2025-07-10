@@ -1,9 +1,11 @@
 from django.http import JsonResponse
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm, CustomUserLoginForm
-from django.views.decorators.csrf import csrf_exempt
-
+from django.views.decorators.http import require_POST
+from django.shortcuts import redirect, render
+from .forms import CustomUserCreationForm, CustomUserLoginForm, \
+    CusstomUserUpdateForm
+from .models import CustomUser
 
 def register(request):
     if request.method == 'POST':
@@ -30,10 +32,26 @@ def login_view(request):
             login(request, user)
             return JsonResponse({'success': True})
         else:
-            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+            return JsonResponse({'success': False, 'errors': form.errors.get_json_data()}, status=400)
     return JsonResponse({'error': 'POST method required'}, status=405)
 
 
 @login_required
 def profile_view(request):
-    return JsonResponse({'success': True, 'message': 'Profile page'})
+    form = CusstomUserUpdateForm(instance=request.user)
+    return render(request, 'users/profile.html', {'form': form})
+
+@login_required
+def update_account_details(request):
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        form = CusstomUserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('products:index')
