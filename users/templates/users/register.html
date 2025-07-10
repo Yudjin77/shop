@@ -1,0 +1,17 @@
+<div class="modal-content">
+  <h2>Регистрация</h2>
+  <form method="post" id="registerForm" novalidate>
+    {% csrf_token %}
+    
+    {% for field in register_form %}
+      <div class="form-group" style="margin-bottom: 1rem;">
+        {{ field.label_tag }}
+        {{ field }}
+        <div class="form-error" style="color: red; font-size: 0.9em;"></div>
+      </div>
+    {% endfor %}
+    
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+  <button type="button" id="showLogin">Уже есть аккаунт? Войти</button>
+</div>

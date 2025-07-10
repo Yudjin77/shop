@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Techno-gadgets</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+<header class="site-header">
+  <div class="container header-container">
+    <div class="categories-wrapper">
+      <button class="categories-btn" id="categories-button">Категории</button>
+      <div id="categories-panel" class="categories-panel">
+        <ul class="categories-list">
+          {% for category in categories %}
+            <li>&raquo; {{ category.title }}</li>
+            {% if not forloop.last %}<hr>{% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <!-- поиск -->
+    <input type="text" class="search-input" placeholder="Поиск по сайту" />
+    <!-- поиск -->
+    <div class="user-actions">
+      {% if user.is_authenticated %}
+        <button type="button" class="profile-link">Profile</button>
+      {% else %}
+        <button type="button" id="loginButton" class="login-link">Login</button>
+      {% endif %}
+      <button class="cart-btn">🛒</button>
+    </div>
+  </div>
+</header>
+
+<!-- Модальные окна -->
+<div id="loginModal" class="modal" style="display: none;">
+  {% include "users/login.html" %}
+</div>
+
+<div id="registerModal" class="modal" style="display: none;">
+  {% include "users/register.html" %}
+</div>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-container">
+            <p>© 2025 Techno-gadgets. Все права защищены.</p>
+            <nav class="footer-nav">
+                <a href="/">Главная</a>
+                <a href="/about">О нас</a>
+                <a href="/contacts">Контакты</a>
+                <a href="/privacy">Политика конфиденциальности</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/auth.js' %}"></script>
+</body>
+</html>

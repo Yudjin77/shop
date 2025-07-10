@@ -1,11 +1,16 @@
 # Виртуальное окружение
 venv/
+.pylintrc
+__pycache__/ #cache
 
 # База данных
-db.sqlite3
+.vscode
+.idea
+.env
 
 # Миграции и временные файлы
 *.pyc
-__pycache__/
 *.log
-*.sqlite3
+debug.log
+media/
+db.sqlite3
